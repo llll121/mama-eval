@@ -1,0 +1,95 @@
+# Anaconda/Miniconda 环境目录
+Projects/Anaconda/
+envs/
+.conda/
+
+# Python 缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 虚拟环境
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE 配置文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 日志文件
+logs/
+*.log
+
+# 输出文件
+output/
+results/
+*.json
+*.txt
+
+# 临时文件
+*.tmp
+*.temp
+temp/
+tmp/
+
+
+# 模型文件
+*.pkl
+*.pth
+*.pt
+*.bin
+*.safetensors
+
+# 配置文件
+.env
+config.ini
+secrets.json
+
+# Jupyter Notebook 检查点
+.ipynb_checkpoints/
+
+# pytest 缓存
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy 缓存
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+Temp/
+logs copy/
