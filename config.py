@@ -11,82 +11,70 @@ EXPERIMENT_CONFIG = {
 }
 
 # LLM配置
+#
+# max_retries bounds the exponential-backoff retry loop in llm_interface.py.
+# It used to be 1048576: with the 5 s backoff cap that turns a persistent API
+# outage into a silent multi-week hang. Eight attempts is roughly 30 s of total
+# backoff, enough to ride out ordinary rate limiting; raise it if you are
+# running against a heavily throttled endpoint.
 LLM_CONFIG = {
     # Llama模型配置
     "llama3.1-70b": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
-        "max_retries": 1048576,
-    },
-    "llama3.1-8b": {
-        "temperature": 0.7,
-        "max_tokens": 512,
-        "top_p": 0.9,
-        "max_retries": 1048576,
-    },
-    "llama3-70b": {
-        "temperature": 0.7,
-        "max_tokens": 512,
-        "top_p": 0.9,
-        "max_retries": 1048576,
-    },
-    "llama3-8b": {
-        "temperature": 0.7,
-        "max_tokens": 512,
-        "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
     # Claude模型配置
     "claude-3.7-sonnet": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
     # DeepSeek模型配置
     "deepseek-v3.1": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
     # OpenAI模型配置
     "gpt-4o-mini": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
     "gpt-4o": {
         "temperature": 0.7,
         "max_tokens": 1024,
         "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
     "gpt-4": {
         "temperature": 0.7,
         "max_tokens": 1024,
         "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
     "gpt-3.5-turbo": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
-        "max_retries": 15,
+        "max_retries": 8,
     },
     "gpt-5.2": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
     "gpt-5-nano": {
         # "temperature": 0.7,
         # "max_tokens": 512,
         # "top_p": 0.9,
-        "max_retries": 1048576,
+        "max_retries": 8,
     },
 }
 

@@ -23,7 +23,18 @@ export MAMA_MODEL="deepseek-v3.1"  # llama3.1-70b, deepseek-v3.1, gpt-4o, gpt-4o
 export MAMA_EXP_NUMBER="first_experiments"
 export MAMA_MAX_ROUNDS=10
 export MAMA_QUESTION_NUM=100
-export OPENAI_API_KEY=""
+
+# OPENAI_API_KEY is deliberately not exported here: assigning an empty
+# value would wipe out a key the caller already exported, and the
+# ${OPENAI_API_KEY:-} fallback in each sub-script would then see "".
+# Only the gpt-* models need an OpenAI key. The Bedrock-hosted models
+# (llama3.1-70b, claude-3.7-sonnet, deepseek-v3.1) authenticate through the
+# AWS credential chain instead, so the key is required conditionally.
+if [[ "${MAMA_MODEL}" == gpt-* && -z "${OPENAI_API_KEY:-}" ]]; then
+  echo "ERROR: model is '${MAMA_MODEL}' but OPENAI_API_KEY is not set." >&2
+  echo "       Run: export OPENAI_API_KEY='sk-...'" >&2
+  exit 1
+fi
 
 echo "=========================================="
 echo "Submitting all MAMA experiment jobs..."

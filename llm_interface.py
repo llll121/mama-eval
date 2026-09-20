@@ -80,18 +80,18 @@ class LlamaInterface(LLMInterface):
         }
         request = json.dumps(native_request)
 
-        last_error = None
         for attempt_index in range(max_retries + 1):
             try:
                 response = self.client.invoke_model(modelId=self.model_id, body=request)
                 response_body = json.loads(response["body"].read())
                 return response_body["generation"]
             except Exception as e:
-                last_error = e
                 if attempt_index < max_retries:
                     _sleep_with_exponential_backoff(attempt_index)
                     continue
-                raise
+                raise RuntimeError(
+                    f"Llama request failed after {max_retries + 1} attempts: {e}"
+                ) from e
 
     def chat_generate(self, messages, temperature=0.7, max_tokens=512, top_p=0.9, **kwargs):
         max_chars = max_tokens * 4  # 粗略估算token上限
@@ -150,7 +150,6 @@ class ClaudeInterface(LLMInterface):
         }
         request = json.dumps(native_request)
 
-        last_error = None
         for attempt_index in range(max_retries + 1):
             try:
                 response = self.client.invoke_model_with_response_stream(modelId=self.model_id, body=request)
@@ -165,11 +164,12 @@ class ClaudeInterface(LLMInterface):
                 
                 return full_response
             except Exception as e:
-                last_error = e
                 if attempt_index < max_retries:
                     _sleep_with_exponential_backoff(attempt_index)
                     continue
-                raise RuntimeError(f"Claude API error: {e}") from e
+                raise RuntimeError(
+                    f"Claude API error after {max_retries + 1} attempts: {e}"
+                ) from e
 
     def chat_generate(self, messages, temperature=0.7, max_tokens=512, top_p=0.9, **kwargs):
         """聊天模式生成响应 - 使用与Llama相同的消息处理逻辑"""
@@ -218,7 +218,6 @@ class DeepSeekInterface(LLMInterface):
 
     def generate(self, prompt, temperature=0.7, max_tokens=512, top_p=0.9, max_retries=5, **kwargs):
         """使用DeepSeek Converse API生成响应"""
-        last_error = None
         for attempt_index in range(max_retries + 1):
             try:
                 response = self.client.converse(
@@ -234,11 +233,12 @@ class DeepSeekInterface(LLMInterface):
                 )
                 return response["output"]["message"]["content"][0]["text"]
             except Exception as e:
-                last_error = e
                 if attempt_index < max_retries:
                     _sleep_with_exponential_backoff(attempt_index)
                     continue
-                raise RuntimeError(f"DeepSeek API error: {e}") from e
+                raise RuntimeError(
+                    f"DeepSeek API error after {max_retries + 1} attempts: {e}"
+                ) from e
 
     def chat_generate(self, messages, temperature=0.7, max_tokens=512, top_p=0.9, **kwargs):
         """聊天模式生成响应 - 使用与Llama相同的消息处理逻辑"""
@@ -305,7 +305,6 @@ class OpenAIInterface(LLMInterface):
     
     def generate(self, prompt, temperature=0.7, max_tokens=512, max_retries=5, **kwargs):
         """使用OpenAI原生方式生成响应"""
-        last_error = None
         for attempt_index in range(max_retries + 1):
             try:
                 response = self.client.chat.completions.create(
@@ -317,15 +316,15 @@ class OpenAIInterface(LLMInterface):
                 )
                 return response.choices[0].message.content
             except Exception as e:
-                last_error = e
                 if attempt_index < max_retries:
                     _sleep_with_exponential_backoff(attempt_index)
                     continue
-                raise RuntimeError(f"OpenAI API error: {e}") from e
+                raise RuntimeError(
+                    f"OpenAI API error after {max_retries + 1} attempts: {e}"
+                ) from e
     
     def chat_generate(self, messages, temperature=0.7, max_tokens=512, max_retries=5, **kwargs):
         """聊天模式生成响应"""
-        last_error = None
         for attempt_index in range(max_retries + 1):
             try:
                 response = self.client.chat.completions.create(
@@ -337,11 +336,12 @@ class OpenAIInterface(LLMInterface):
                 )
                 return response.choices[0].message.content
             except Exception as e:
-                last_error = e
                 if attempt_index < max_retries:
                     _sleep_with_exponential_backoff(attempt_index)
                     continue
-                raise RuntimeError(f"OpenAI API error: {e}") from e
+                raise RuntimeError(
+                    f"OpenAI API error after {max_retries + 1} attempts: {e}"
+                ) from e
 
 class LLMFactory:
     """LLM工厂类 - 根据模型类型创建对应的接口"""
@@ -349,13 +349,10 @@ class LLMFactory:
     # 支持的模型映射
     SUPPORTED_MODELS = {
         # Llama模型
-        "llama3-8b": "meta.llama3-1-8b-instruct-v1:0",
-        "llama3-70b": "meta.llama3-1-70b-instruct-v1:0",
-        "llama3.1-8b": "meta.llama3.1-8b-instruct-v1:0",
-        "llama3.1-70b": "meta.llama3.1-70b-instruct-v1:0",
-        "llama2-7b": "meta.llama2-7b-chat-v1:0",
-        "llama2-13b": "meta.llama2-13b-chat-v1:0",
-        "llama2-70b": "meta.llama2-70b-chat-v1:0",
+        # LlamaInterface hardcodes this one Bedrock model id and ignores the
+        # mapping below, so only the 70B variant may be listed here: any other
+        # Llama name would be accepted and then silently served by llama3.1-70b.
+        "llama3.1-70b": "meta.llama3-1-70b-instruct-v1:0",
         
         # Claude模型
         "claude-3.7-sonnet": "us.anthropic.claude-3-7-sonnet-20250219-v1:0",

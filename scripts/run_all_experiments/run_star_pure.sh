@@ -12,8 +12,14 @@ model="${MAMA_MODEL:-deepseek-v3.1}"
 exp_number="${MAMA_EXP_NUMBER:-first_experiments}"
 max_rounds="${MAMA_MAX_ROUNDS:-10}"
 question_num="${MAMA_QUESTION_NUM:-25}"
-OPENAI_API_KEY="${OPENAI_API_KEY:-}"
-export OPENAI_API_KEY="${OPENAI_API_KEY}"
+# Only the gpt-* models need an OpenAI key. The Bedrock-hosted models
+# (llama3.1-70b, claude-3.7-sonnet, deepseek-v3.1) authenticate through the
+# AWS credential chain instead, so the key is required conditionally.
+if [[ "${model}" == gpt-* && -z "${OPENAI_API_KEY:-}" ]]; then
+  echo "ERROR: model is '${model}' but OPENAI_API_KEY is not set." >&2
+  echo "       Run: export OPENAI_API_KEY='sk-...'" >&2
+  exit 1
+fi
 
 graph_types=("star_pure")
 num_agents_list=(4 5 6)
