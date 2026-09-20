@@ -5,7 +5,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "${script_dir}/../.." && pwd)"
 cd "${repo_root}"
 
-# 运行MAMA多智能体实验 - 全参数组合测试
+# Run the MAMA multi-agent experiments on the complete topology
 mkdir -p logs
 
 model="${MAMA_MODEL:-deepseek-v3.1}"
@@ -27,16 +27,16 @@ graph_types=("complete")
 # num_agents_list=(6)
 num_agents_list=(4 5 6)
 
-# 创建目录结构
+# Create the output directory tree
 mkdir -p logs/all_entities/${model}/${exp_number}
 for graph_type in "${graph_types[@]}"; do
   mkdir -p "logs/all_entities/${model}/${exp_number}/${graph_type}"
 done
 
-# 运行所有组合的实验
+# Run every parameter combination
 for graph_type in "${graph_types[@]}"; do
   for num_agents in "${num_agents_list[@]}"; do
-    # 计算attacker-idx的连续序列，从1开始到(num_agents / 2)截止
+    # Sweep attacker-idx from 1 up to floor(num_agents / 2)
     for attacker_idx in $(seq 1 $((num_agents / 2))); do
     # for attacker_idx in $((2)); do
       echo "Running: model=${model}, graph=${graph_type}, agents=${num_agents}, target=${target_idx}, attacker=${attacker_idx}"

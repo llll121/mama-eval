@@ -1,9 +1,9 @@
-# Anaconda/Miniconda 环境目录
+# Anaconda / Miniconda environment directories
 Projects/Anaconda/
 envs/
 .conda/
 
-# Python 缓存文件
+# Python cache files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -26,21 +26,21 @@ wheels/
 *.egg
 MANIFEST
 
-# 虚拟环境
+# Virtual environments
 venv/
 env/
 ENV/
 env.bak/
 venv.bak/
 
-# IDE 配置文件
+# IDE configuration
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# 操作系统文件
+# Operating-system files
 .DS_Store
 .DS_Store?
 ._*
@@ -49,48 +49,48 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# 日志文件
+# Log files
 logs/
 *.log
 
-# 输出文件
+# Output files
 output/
 results/
 *.json
 *.txt
 !requirements.txt
 
-# 解压 data/*.zip 后产生的本地数据集副本（仓库只跟踪 zip）
+# Local dataset copy produced by unzipping data/*.zip (only the zip is tracked)
 data/*.csv
 
-# 临时文件
+# Temporary files
 *.tmp
 *.temp
 temp/
 tmp/
 
 
-# 模型文件
+# Model weights
 *.pkl
 *.pth
 *.pt
 *.bin
 *.safetensors
 
-# 配置文件
+# Local configuration and secrets
 .env
 config.ini
 secrets.json
 
-# Jupyter Notebook 检查点
+# Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# pytest 缓存
+# pytest cache
 .pytest_cache/
 .coverage
 htmlcov/
 
-# mypy 缓存
+# mypy cache
 .mypy_cache/
 .dmypy.json
 dmypy.json

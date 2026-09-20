@@ -1,5 +1,5 @@
 """
-MAMA工具函数 - 核心功能模块
+MAMA utility functions - helpers shared by the experiment driver.
 """
 
 import json
@@ -10,29 +10,29 @@ from config import LLM_CONFIG
 
 def get_llm(model_type="llama3.1-70b"):
     """
-    获取LLM接口实例
+    Return an LLM interface instance for the given model.
     
     Args:
-        model_type: 模型类型
+        model_type: Model name, as listed in LLMFactory.SUPPORTED_MODELS.
     
     Returns:
-        LLM接口实例
+        An object exposing generate() and chat_generate().
     """
     return LLMFactory.create_llm(model_type)
 
 def create_directory(directory):
-    """创建目录"""
+    """Create a directory if it does not already exist."""
     if not os.path.exists(directory):
         os.makedirs(directory)
 
 def generate_adj(n, graph_type):
-    """生成不同图类型的邻接矩阵"""
+    """Build the adjacency matrix for the requested topology."""
     if "complete" in graph_type:
-        # 完全图：所有节点都相互连接
+        # Complete graph: every node is connected to every other node
         adj_matrix = np.ones((n, n), dtype=int)
         np.fill_diagonal(adj_matrix, 0)
     elif "tree" in graph_type:
-        # 二叉树结构
+        # Binary tree
         adj_matrix = np.zeros((n, n), dtype=int)
         for i in range(n):
             left_child = 2 * i + 1
@@ -50,7 +50,7 @@ def generate_adj(n, graph_type):
             adj_matrix[i, i + 1] = 1
             adj_matrix[i + 1, i] = 1
     elif "star_ring" in graph_type:
-        # 星形结构：中心节点连接所有其他节点，环形结构
+        # Star with a ring: node 0 is the hub and the leaves also form a ring
         adj_matrix = np.zeros((n, n), dtype=int)
         for i in range(1, n):
             adj_matrix[0][i] = 1
@@ -61,13 +61,13 @@ def generate_adj(n, graph_type):
         adj_matrix[1][n - 1] = 1
         adj_matrix[n - 1][1] = 1
     elif "star_pure" in graph_type:
-        # 星形结构：中心节点连接所有其他节点，纯星形结构
+        # Pure star: node 0 is the hub and the only point of contact
         adj_matrix = np.zeros((n, n), dtype=int)
         for i in range(1, n):
             adj_matrix[0][i] = 1
             adj_matrix[i][0] = 1
     elif "circle" in graph_type:
-        # 环形结构
+        # Ring
         adj_matrix = np.zeros((n, n), dtype=int)
         for i in range(n):
             adj_matrix[i][(i + 1) % n] = 1
@@ -78,7 +78,7 @@ def generate_adj(n, graph_type):
     return adj_matrix
 
 def save_experiment_result(result, output_path, json_format=True):
-    """保存实验结果"""
+    """Write an experiment result to disk."""
     create_directory(os.path.dirname(output_path))
     with open(output_path, 'w', encoding="utf-8") as f:
         if json_format:
@@ -87,5 +87,5 @@ def save_experiment_result(result, output_path, json_format=True):
             f.write(str(result) + "\n")
 
 def get_llm_config(model_type):
-    """获取LLM配置"""
+    """Return the generation settings for a model, defaulting to llama3.1-70b."""
     return LLM_CONFIG.get(model_type, LLM_CONFIG["llama3.1-70b"]) 

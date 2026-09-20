@@ -1,16 +1,16 @@
-# MAMA项目配置文件 - 多智能体记忆提取实验
+# MAMA configuration - multi-agent memory extraction experiments
 
-# 实验基础配置
+# Baseline experiment settings
 EXPERIMENT_CONFIG = {
-    "num_agents": 6,                    # 智能体总数
-    "target_idx": 0,                    # 目标节点索引
-    "attacker_idx": 5,                # 攻击者节点索引列表
-    "graph_types": ["star_pure", "star_ring", "circle", "tree", "complete", "chain"],  # 图类型
-    "model": "llama3.1-70b",           # 默认模型（Llama）
-    "max_rounds": 10                    # 最大轮数
+    "num_agents": 6,                   # Total number of agents in the network
+    "target_idx": 0,                   # Index of the agent holding the private memory
+    "attacker_idx": 5,                 # Index of the agent attempting the extraction
+    "graph_types": ["star_pure", "star_ring", "circle", "tree", "complete", "chain"],
+    "model": "llama3.1-70b",           # Default model
+    "max_rounds": 10                   # Maximum number of RelCom rounds
 }
 
-# LLM配置
+# Per-model generation settings
 #
 # max_retries bounds the exponential-backoff retry loop in llm_interface.py.
 # It used to be 1048576: with the 5 s backoff cap that turns a persistent API
@@ -18,28 +18,28 @@ EXPERIMENT_CONFIG = {
 # backoff, enough to ride out ordinary rate limiting; raise it if you are
 # running against a heavily throttled endpoint.
 LLM_CONFIG = {
-    # Llama模型配置
+    # Llama
     "llama3.1-70b": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
         "max_retries": 8,
     },
-    # Claude模型配置
+    # Claude
     "claude-3.7-sonnet": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
         "max_retries": 8,
     },
-    # DeepSeek模型配置
+    # DeepSeek
     "deepseek-v3.1": {
         "temperature": 0.7,
         "max_tokens": 512,
         "top_p": 0.9,
         "max_retries": 8,
     },
-    # OpenAI模型配置
+    # OpenAI
     "gpt-4o-mini": {
         "temperature": 0.7,
         "max_tokens": 512,
@@ -78,9 +78,9 @@ LLM_CONFIG = {
     },
 }
 
-# 输出配置
+# Output settings
 OUTPUT_CONFIG = {
-    "base_dir": "output",               # 基础输出目录
-    "results_dir": "results",           # 结果目录
-    "log_level": "INFO",                # 日志级别
+    "base_dir": "output",              # Base output directory
+    "results_dir": "results",          # Results directory
+    "log_level": "INFO",               # Logging level
 } 

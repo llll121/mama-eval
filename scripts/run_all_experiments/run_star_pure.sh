@@ -5,7 +5,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "${script_dir}/../.." && pwd)"
 cd "${repo_root}"
 
-# 运行MAMA多智能体实验 - star_pure图结构测试
+# Run the MAMA multi-agent experiments on the star_pure topology
 mkdir -p logs
 
 model="${MAMA_MODEL:-deepseek-v3.1}"
@@ -24,13 +24,13 @@ fi
 graph_types=("star_pure")
 num_agents_list=(4 5 6)
 
-# 创建logs/all_entities目录结构
+# Create the logs/all_entities directory tree
 mkdir -p logs/all_entities/${model}/${exp_number}
 for graph_type in "${graph_types[@]}"; do
   mkdir -p "logs/all_entities/${model}/${exp_number}/${graph_type}"
 done
 
-# 运行所有组合的实验
+# Run every parameter combination
 for graph_type in "${graph_types[@]}"; do
   for num_agents in "${num_agents_list[@]}"; do
     case "$num_agents" in
