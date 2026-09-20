@@ -58,6 +58,10 @@ output/
 results/
 *.json
 *.txt
+!requirements.txt
+
+# 解压 data/*.zip 后产生的本地数据集副本（仓库只跟踪 zip）
+data/*.csv
 
 # 临时文件
 *.tmp

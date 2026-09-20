@@ -1,0 +1,13 @@
+# MAMA - core runtime dependencies
+#
+# Install with:
+#     pip install -r requirements.txt
+#
+# The version after each package is the one the experiments reported in the
+# paper were run with (Python 3.12). The constraints below are deliberately
+# loose so the code also installs into an existing environment.
+
+openai>=1.50        # tested with 1.95.1 - GPT models via the OpenAI API
+boto3>=1.34         # tested with 1.39.4 - Llama / Claude / DeepSeek via AWS Bedrock
+pandas>=2.0         # tested with 2.3.1  - loads data/llama3.1_num484_nopii.csv
+numpy>=1.26         # tested with 2.3.1  - builds the topology adjacency matrices
