@@ -16,6 +16,18 @@ without ever stating that it is doing so. By holding everything else fixed and v
 the communication topology, the setup measures how much a network's shape governs how far
 private memory travels.
 
+<p align="center">
+  <img src="assets/mama_overview.png" width="100%"
+       alt="Overview of MAMA: agent prompts, the six topologies, and an example run on a star-pure topology">
+</p>
+
+*Overview of MAMA. (Top) The three agent roles and their system and user prompts. (Lower left)
+The six communication topologies, with attacker and target placements indicated by node
+indices. (Lower right) An example interaction on a star-pure topology, where PII-seeking
+attacker messages propagate through the network and the leakage rate counts how many
+ground-truth PII entities are recovered over rounds. Prompts are abbreviated; see `prompts.py`
+for the exact text. [PDF version](assets/mama_overview.pdf).*
+
 **SPIRIT (Synthetic PII Role-based Interaction Tasks)**, the synthetic PII evaluation dataset
 used in the paper, ships with this repository under `data/`. The complete dataset is also
 hosted on Hugging Face in the
@@ -36,6 +48,7 @@ Dataset Viewer and direct loading through the `datasets` library.
 | `config.py` | Per-model generation settings |
 | `data/` | The SPIRIT dataset, shipped as a zip archive (licensed separately, see [License](#license)) |
 | `scripts/run_all_experiments/` | Batch scripts, one per topology, plus a driver that runs all six |
+| `assets/` | The overview figure, as PNG (shown above) and PDF |
 
 ---
 
