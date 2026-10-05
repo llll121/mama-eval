@@ -4,7 +4,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2512.04668-B31B1B?logo=arxiv)](https://arxiv.org/abs/2512.04668)
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E)](https://huggingface.co/datasets/liu1111121/MAMA-SPIRIT)
 [![Code License](https://img.shields.io/badge/Code%20License-MIT-green)](LICENSE)
-[![Data License](https://img.shields.io/badge/Data%20License-Apache%202.0-green)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Data License](https://img.shields.io/badge/Data%20License-Apache%202.0-green)](data/LICENSE)
 
 Reference implementation for **"Topology Matters: Measuring Memory Leakage in Multi-Agent LLMs"**
 (Findings of the ACL 2026).
@@ -334,4 +334,4 @@ The SPIRIT dataset is distributed separately under the
 Apache-2.0-licensed
 [Gretel Synthetic Domain-Specific Documents Dataset](https://huggingface.co/datasets/gretelai/gretel-pii-masking-en-v1).
 This also applies to the copy in `data/llama3.1_num484_nopii.zip`: the MIT License covers the
-code in this repository, not the data.
+code in this repository, not the data. See [data/LICENSE](data/LICENSE).
