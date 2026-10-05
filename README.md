@@ -21,12 +21,8 @@ private memory travels.
        alt="Overview of MAMA: agent prompts, the six topologies, and an example run on a star-pure topology">
 </p>
 
-*Overview of MAMA. (Top) The three agent roles and their system and user prompts. (Lower left)
-The six communication topologies, with attacker and target placements indicated by node
-indices. (Lower right) An example interaction on a star-pure topology, where PII-seeking
-attacker messages propagate through the network and the leakage rate counts how many
-ground-truth PII entities are recovered over rounds. Prompts are abbreviated; see `prompts.py`
-for the exact text. [PDF version](assets/mama_overview.pdf).*
+*Overview of MAMA: agent prompts (top), the six topologies (lower left), and an example run on
+a star-pure topology (lower right).*
 
 **SPIRIT (Synthetic PII Role-based Interaction Tasks)**, the synthetic PII evaluation dataset
 used in the paper, ships with this repository under `data/`. The complete dataset is also
