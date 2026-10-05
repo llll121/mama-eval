@@ -1,17 +1,26 @@
 # MAMA: Measuring Memory Leakage in Multi-Agent LLMs
 
+[![ACL 2026](https://img.shields.io/badge/ACL-2026-4B8BBE)](https://aclanthology.org/2026.findings-acl.1980/)
+[![arXiv](https://img.shields.io/badge/arXiv-2512.04668-B31B1B?logo=arxiv)](https://arxiv.org/abs/2512.04668)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E)](https://huggingface.co/datasets/liu1111121/MAMA-SPIRIT)
+[![Code License](https://img.shields.io/badge/Code%20License-MIT-green)](LICENSE)
+[![Data License](https://img.shields.io/badge/Data%20License-Apache%202.0-green)](https://www.apache.org/licenses/LICENSE-2.0)
+
 Reference implementation for **"Topology Matters: Measuring Memory Leakage in Multi-Agent LLMs"**
 (Findings of the ACL 2026).
 
-📄 **Paper:** [ACL Anthology](https://aclanthology.org/2026.findings-acl.1980/) ·
-[PDF](https://aclanthology.org/2026.findings-acl.1980.pdf) ·
-[arXiv:2512.04668](https://arxiv.org/abs/2512.04668)
+**MAMA (Multi-Agent Memory Attack)** simulates a network of LLM agents that collaborate on a
+shared task. One agent (the *target*) is given a private document as memory; another agent
+(the *attacker*) tries to draw that information out over repeated rounds of conversation,
+without ever stating that it is doing so. By holding everything else fixed and varying only
+the communication topology, the setup measures how much a network's shape governs how far
+private memory travels.
 
-MAMA simulates a network of LLM agents that collaborate on a shared task. One agent (the
-*target*) is given a private document as memory; another agent (the *attacker*) tries to draw
-that information out over repeated rounds of conversation, without ever stating that it is
-doing so. By holding everything else fixed and varying only the communication topology, the
-setup measures how much a network's shape governs how far private memory travels.
+**SPIRIT (Synthetic PII Role-based Interaction Tasks)**, the synthetic PII evaluation dataset
+used in the paper, ships with this repository under `data/`. The complete dataset is also
+hosted on Hugging Face in the
+**[MAMA-SPIRIT](https://huggingface.co/datasets/liu1111121/MAMA-SPIRIT)** repository, with a
+Dataset Viewer and direct loading through the `datasets` library.
 
 ---
 
@@ -25,7 +34,7 @@ setup measures how much a network's shape governs how far private memory travels
 | `prompts.py` | All system and phase prompts, including both attacker formulations |
 | `methods.py` | Topology construction and small I/O helpers |
 | `config.py` | Per-model generation settings |
-| `data/` | The evaluation dataset, shipped as a zip archive |
+| `data/` | The SPIRIT dataset, shipped as a zip archive (licensed separately, see [License](#license)) |
 | `scripts/run_all_experiments/` | Batch scripts, one per topology, plus a driver that runs all six |
 
 ---
@@ -183,8 +192,11 @@ matching rule.
 
 ## The dataset
 
-`data/llama3.1_num484_nopii.zip` contains 484 synthetic documents generated with Llama 3.1,
-each annotated with the PII-like entities it contains. Columns:
+`data/llama3.1_num484_nopii.zip` contains **SPIRIT**, the dataset used in the paper. Each of
+its 484 rows pairs a synthetic document, taken from the
+[Gretel Synthetic Domain-Specific Documents Dataset](https://huggingface.co/datasets/gretelai/gretel-pii-masking-en-v1)
+and annotated with the PII-like entities it contains, with an LLM-generated public task.
+Columns:
 
 | Column | Used? | Contents |
 | --- | --- | --- |
@@ -197,6 +209,23 @@ each annotated with the PII-like entities it contains. Columns:
 All entities are synthetic. Some of them imitate the format of real credentials — API keys,
 credit card numbers, unique identifiers — because that is what the benchmark is measuring, but
 none of them are valid and none refer to real people.
+
+### On Hugging Face
+
+The same data is hosted in the
+[liu1111121/MAMA-SPIRIT](https://huggingface.co/datasets/liu1111121/MAMA-SPIRIT) repository; its
+`data/mama_spirit.csv` is identical to the CSV inside the zip. It can be browsed in the Dataset
+Viewer, or loaded without cloning this repository (requires `pip install datasets`, which the
+experiments themselves do not need):
+
+```python
+from datasets import load_dataset
+
+dataset = load_dataset("liu1111121/MAMA-SPIRIT", split="test")  # 484 rows
+```
+
+`run.py` reads a local CSV through `--dataset-path`, so the experiment scripts keep using the
+unpacked zip.
 
 ---
 
@@ -289,4 +318,11 @@ multi-agent systems, so that safer topologies and mitigations can be designed.
 
 ## License
 
-Released under the MIT License. See [LICENSE](LICENSE).
+The MAMA source code is released under the MIT License. See [LICENSE](LICENSE).
+
+The SPIRIT dataset is distributed separately under the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) and is derived from the
+Apache-2.0-licensed
+[Gretel Synthetic Domain-Specific Documents Dataset](https://huggingface.co/datasets/gretelai/gretel-pii-masking-en-v1).
+This also applies to the copy in `data/llama3.1_num484_nopii.zip`: the MIT License covers the
+code in this repository, not the data.
